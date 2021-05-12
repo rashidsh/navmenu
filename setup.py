@@ -5,12 +5,14 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='navmenu',
-    version='0.1.0',
+    version='0.1.1',
     description='A library to create multilevel menus for chatbots',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='rashidsh',
     author_email='mail@rashidsh.ru',
     url='https://github.com/rashidsh/navmenu',
+    license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
