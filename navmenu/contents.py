@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 
 class BaseContent(ABC):
@@ -18,7 +19,7 @@ class Content(BaseContent):
         return f'Content({repr(self.text)})'
 
     @staticmethod
-    def keys() -> tuple[str]:
+    def keys() -> Tuple[str]:
         return 'text',
 
     def serialize(self) -> dict:
