@@ -3,6 +3,8 @@ from typing import Tuple
 
 
 class BaseContent(ABC):
+    __slots__ = ()
+
     def __getitem__(self, key):
         return getattr(self, key)
 
@@ -12,6 +14,8 @@ class BaseContent(ABC):
 
 
 class Content(BaseContent):
+    __slots__ = 'text',
+
     def __init__(self, text: str = None) -> None:
         self.text = text
 

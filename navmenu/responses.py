@@ -4,6 +4,8 @@ from navmenu.keyboard import Keyboard
 
 
 class Message:
+    __slots__ = 'keyboard', 'text'
+
     def __init__(
             self, text: Optional[str] = None, keyboard: Optional[Keyboard] = None, payload: Optional[dict] = None
     ) -> None:
@@ -19,6 +21,8 @@ class Message:
 
 
 class Response:
+    __slots__ = 'message', 'menu', 'go_back_count'
+
     def __init__(self, message: Optional[Message] = None, menu: str = None, go_back_count: int = None) -> None:
         self.message = message
         self.menu = menu

@@ -3,6 +3,8 @@ from typing import Optional
 
 
 class StateHandler(ABC):
+    __slots__ = ()
+
     @abstractmethod
     def get(self, user_id: Optional[int]) -> str:
         pass
@@ -17,6 +19,8 @@ class StateHandler(ABC):
 
 
 class MemoryStateHandler(StateHandler):
+    __slots__ = 'default_state', 'state', 'history'
+
     def __init__(self, default_state: str) -> None:
         self.default_state = default_state
 

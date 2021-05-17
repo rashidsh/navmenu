@@ -10,6 +10,8 @@ from .keyboard import KeyboardButton, Keyboard
 
 
 class BaseMenu(ABC):
+    __slots__ = ()
+
     @abstractmethod
     def select(self, action: str, payload=None) -> Optional[Iterator[Message]]:
         pass
@@ -27,6 +29,8 @@ class BaseMenu(ABC):
 
 
 class Menu(BaseMenu):
+    __slots__ = 'content', 'items', 'default_action'
+
     def __init__(
             self, content: BaseContent, items: Sequence[BaseItem], default_action: Optional[Action] = None
     ) -> None:
@@ -99,6 +103,8 @@ class Menu(BaseMenu):
 
 
 class CustomMenu(BaseMenu):
+    __slots__ = 'handler',
+
     def __init__(self, handler) -> None:
         super().__init__()
 

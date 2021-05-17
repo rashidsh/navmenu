@@ -4,6 +4,8 @@ from .keyboard import ButtonColors
 
 
 class ItemContent(ABC):
+    __slots__ = ()
+
     @abstractmethod
     def get_content(self, payload: str) -> dict:
         pass
@@ -14,6 +16,8 @@ class ItemContent(ABC):
 
 
 class TextItemContent(ItemContent):
+    __slots__ = 'text', 'color'
+
     def __init__(self, text: str, color: int = ButtonColors.DEFAULT) -> None:
         self.text = text
         self.color = color

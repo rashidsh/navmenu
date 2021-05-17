@@ -9,6 +9,8 @@ class ButtonColors:
 
 
 class KeyboardButton:
+    __slots__ = 'payload', 'text', 'color'
+
     def __init__(self, payload: Any, text: str, color: Optional[int] = ButtonColors.DEFAULT) -> None:
         self.payload = payload
         self.text = text
@@ -19,6 +21,8 @@ class KeyboardButton:
 
 
 class Keyboard:
+    __slots__ = 'lines',
+
     def __init__(self, lines: Optional[Sequence] = None) -> None:
         if lines is None:
             lines = []

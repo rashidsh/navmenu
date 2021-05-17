@@ -6,6 +6,8 @@ from .responses import Message, Response
 
 
 class MenuManager:
+    __slots__ = 'menus', 'state_handler'
+
     def __init__(self, menus: Dict[str, BaseMenu], state_handler: StateHandler) -> None:
         self.menus = menus
         self.state_handler = state_handler

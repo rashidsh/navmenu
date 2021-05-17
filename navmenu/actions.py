@@ -5,6 +5,8 @@ from .responses import Message, Response
 
 
 class Action(ABC):
+    __slots__ = ()
+
     @abstractmethod
     def process(self, payload: Optional[dict] = None) -> Message:
         pass
@@ -15,6 +17,8 @@ class Action(ABC):
 
 
 class MessageAction(Action):
+    __slots__ = 'text',
+
     def __init__(self, text: str) -> None:
         self.text = text
 
@@ -31,6 +35,8 @@ class MessageAction(Action):
 
 
 class SubmenuAction(Action):
+    __slots__ = 'menu_name',
+
     def __init__(self, menu_name: str) -> None:
         self.menu_name = menu_name
 
@@ -47,6 +53,8 @@ class SubmenuAction(Action):
 
 
 class GoBackAction(Action):
+    __slots__ = 'count',
+
     def __init__(self, count: int = 1) -> None:
         self.count = count
 
@@ -66,6 +74,8 @@ class GoBackAction(Action):
 
 
 class ExecuteAction(Action):
+    __slots__ = 'command', 'return_text'
+
     def __init__(self, command: str, return_text: bool = False) -> None:
         self.command = command
         self.return_text = return_text
@@ -88,6 +98,8 @@ class ExecuteAction(Action):
 
 
 class FunctionAction(Action):
+    __slots__ = 'function',
+
     def __init__(self, function) -> None:
         self.function = function
 

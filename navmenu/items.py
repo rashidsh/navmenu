@@ -6,6 +6,8 @@ from .item_contents import ItemContent
 
 
 class BaseItem(ABC):
+    __slots__ = 'name', 'action'
+
     def __init__(self, name: str = None, action: Action = None) -> None:
         self.name = name
         self.action = action
@@ -43,6 +45,8 @@ class BaseItem(ABC):
 
 
 class Item(BaseItem):
+    __slots__ = 'content',
+
     def __init__(self, name: str, content: ItemContent, action: Action = None) -> None:
         super().__init__(name, action)
 
@@ -66,6 +70,8 @@ class Item(BaseItem):
 
 
 class LineBreakItem(BaseItem):
+    __slots__ = ()
+
     def __repr__(self) -> str:
         return 'LineBreakItem()'
 
@@ -76,6 +82,8 @@ class LineBreakItem(BaseItem):
 
 
 class ConditionalItem(Item):
+    __slots__ = 'condition',
+
     def __init__(self, name: str, content: ItemContent, action: Action, condition: str) -> None:
         super().__init__(name, content, action)
 
