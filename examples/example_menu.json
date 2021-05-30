@@ -1,0 +1,95 @@
+{
+  "menus": {
+    "main_menu": {
+      "type": "Menu",
+      "content": {
+        "type": "Content",
+        "text": "Main menu"
+      },
+      "items": [
+        {
+          "type": "Item",
+          "name": "print",
+          "action": {
+            "type": "MessageAction",
+            "text": "Text message"
+          },
+          "content": {
+            "type": "TextItemContent",
+            "text": "print text",
+            "color": 1
+          }
+        },
+        {
+          "type": "LineBreakItem"
+        },
+        {
+          "type": "Item",
+          "name": "open",
+          "action": {
+            "type": "SubmenuAction",
+            "menu_name": "submenu"
+          },
+          "content": {
+            "type": "TextItemContent",
+            "text": "open submenu"
+          }
+        }
+      ],
+      "default_action": {
+        "type": "MessageAction",
+        "text": "Please use buttons to navigate"
+      }
+    },
+    "submenu": {
+      "type": "Menu",
+      "content": {
+        "type": "Content",
+        "text": "Submenu"
+      },
+      "items": [
+        {
+          "type": "Item",
+          "name": "calc",
+          "action": {
+            "type": "ExecuteAction",
+            "command": "f\"2 + 2 = {2 + 2}\"",
+            "return_text": true
+          },
+          "content": {
+            "type": "TextItemContent",
+            "text": "calculate 2 + 2",
+            "color": 1
+          }
+        },
+        {
+          "type": "Item",
+          "name": "func",
+          "action": {
+            "type": "FunctionAction",
+            "function": "go_back_func"
+          },
+          "content": {
+            "type": "TextItemContent",
+            "text": "run function",
+            "color": 1
+          }
+        },
+        {
+          "type": "LineBreakItem"
+        },
+        {
+          "type": "Item",
+          "name": "back",
+          "action": {
+            "type": "GoBackAction"
+          },
+          "content": {
+            "type": "TextItemContent",
+            "text": "go back"
+          }
+        }
+      ]
+    }
+  }
+}

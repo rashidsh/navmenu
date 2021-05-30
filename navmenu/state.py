@@ -14,6 +14,10 @@ class StateHandler(ABC):
         pass
 
     @abstractmethod
+    def create(self, user_id: Optional[int]) -> bool:
+        pass
+
+    @abstractmethod
     def go_back(self, user_id: Optional[int], count: Optional[int] = 1) -> None:
         pass
 
@@ -42,6 +46,13 @@ class MemoryStateHandler(StateHandler):
 
         self.history[user_id].append(self.state[user_id] if user_id in self.state else self.default_state)
         self.state[user_id] = new_state
+
+    def create(self, user_id: Optional[int]) -> bool:
+        if user_id not in self.state:
+            self.state[user_id] = self.default_state
+            self.history[user_id] = []
+
+            return True
 
     def go_back(self, user_id: Optional[int], count: Optional[int] = 1) -> None:
         if count < 1:

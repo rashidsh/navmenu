@@ -1,6 +1,7 @@
 from navmenu import MenuManager
 from navmenu.actions import MessageAction, SubmenuAction, GoBackAction, ExecuteAction, FunctionAction
 from navmenu.contents import Content
+from navmenu.io import ConsoleIO
 from navmenu.item_contents import TextItemContent
 from navmenu.items import Item, LineBreakItem
 from navmenu.menus import Menu
@@ -34,29 +35,8 @@ menu_manager = MenuManager({
 
 
 def main():
-    while True:
-        message = menu_manager.get_message()
-
-        if message:
-            actions = ''
-            for line in message.keyboard.lines:
-                actions += ' | '.join(f"{i.payload}: {i.text}" for i in line) + '\n'
-
-            separator = '-' * 20
-
-            print(f"{separator}\n{message.text}\n{separator}\n{actions}{separator}")
-
-        text = input('Command: ')
-
-        try:
-            messages = menu_manager.select(text)
-
-        except ValueError:
-            print('Invalid command')
-
-        else:
-            for message in messages:
-                print(message.text)
+    io = ConsoleIO(menu_manager)
+    io.process()
 
 
 if __name__ == '__main__':

@@ -33,3 +33,11 @@ class TestMemoryStateHandler:
 
         with pytest.raises(ValueError):
             state_handler.go_back(123, 0)
+
+    def test_create(self, state_handler):
+        is_created = state_handler.create(123)
+        assert is_created
+        assert 123 in state_handler.state
+
+        is_created = state_handler.create(123)
+        assert not is_created
