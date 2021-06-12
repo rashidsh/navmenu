@@ -69,6 +69,7 @@ def deserialize_menu(data: dict, function_container: ModuleType, custom_menu_han
 
 
 def deserialize(data: dict, function_container: ModuleType = None, custom_menu_handlers: Sequence = None) -> dict:
+    """Deserialize the dictionary to a menu list."""
     return {
         menu_name: deserialize_menu(menu, function_container, custom_menu_handlers)
         for menu_name, menu in data['menus'].items()

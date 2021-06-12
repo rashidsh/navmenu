@@ -5,18 +5,24 @@ from .responses import Message, Response
 
 
 class Action(ABC):
+    """A generic action."""
+
     __slots__ = ()
 
     @abstractmethod
-    def process(self, payload: Optional[dict] = None) -> Message:
+    def process(self, payload: Optional[dict] = None) -> Union[Message, Response]:
+        """Process the payload and return a response."""
         pass
 
     @abstractmethod
     def serialize(self) -> dict:
+        """Serialize the class instance to a dictionary."""
         pass
 
 
 class MessageAction(Action):
+    """An action that returns a message."""
+
     __slots__ = 'text',
 
     def __init__(self, text: str) -> None:
@@ -35,6 +41,8 @@ class MessageAction(Action):
 
 
 class SubmenuAction(Action):
+    """An action that opens a submenu."""
+
     __slots__ = 'menu_name',
 
     def __init__(self, menu_name: str) -> None:
@@ -53,6 +61,8 @@ class SubmenuAction(Action):
 
 
 class GoBackAction(Action):
+    """An action that returns user to the one of previous menus."""
+
     __slots__ = 'count',
 
     def __init__(self, count: int = 1) -> None:
@@ -74,6 +84,8 @@ class GoBackAction(Action):
 
 
 class ExecuteAction(Action):
+    """An action that executes a code and optionally returns a message with the result."""
+
     __slots__ = 'command', 'return_text'
 
     def __init__(self, command: str, return_text: bool = False) -> None:
@@ -98,6 +110,8 @@ class ExecuteAction(Action):
 
 
 class FunctionAction(Action):
+    """An action that runs a function and optionally returns a response."""
+
     __slots__ = 'function',
 
     def __init__(self, function) -> None:

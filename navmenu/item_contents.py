@@ -4,18 +4,24 @@ from .keyboard import ButtonColors
 
 
 class ItemContent(ABC):
+    """Generic menu item content."""
+
     __slots__ = ()
 
     @abstractmethod
     def get_content(self, payload: str) -> dict:
+        """Process the payload and return menu content."""
         pass
 
     @abstractmethod
     def serialize(self) -> dict:
+        """Serialize the class instance to a dictionary."""
         pass
 
 
 class TextItemContent(ItemContent):
+    """A text menu item."""
+
     __slots__ = 'text', 'color'
 
     def __init__(self, text: str, color: int = ButtonColors.DEFAULT) -> None:

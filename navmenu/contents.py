@@ -3,6 +3,8 @@ from typing import Tuple
 
 
 class BaseContent(ABC):
+    """Generic menu content."""
+
     __slots__ = ()
 
     def __getitem__(self, key):
@@ -10,10 +12,13 @@ class BaseContent(ABC):
 
     @abstractmethod
     def serialize(self) -> dict:
+        """Serialize the class instance to a dictionary."""
         pass
 
 
 class Content(BaseContent):
+    """Text menu content."""
+
     __slots__ = 'text',
 
     def __init__(self, text: str = None) -> None:

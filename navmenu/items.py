@@ -6,6 +6,8 @@ from .item_contents import ItemContent
 
 
 class BaseItem(ABC):
+    """A generic menu item."""
+
     __slots__ = 'name', 'action'
 
     def __init__(self, name: str = None, action: Action = None) -> None:
@@ -17,12 +19,15 @@ class BaseItem(ABC):
 
     @abstractmethod
     def get_content(self) -> dict:
+        """Get menu item content."""
         pass
 
     def is_available(self, payload: Optional[dict] = None) -> bool:
+        """Check whether the menu item is available."""
         return True
 
     def on_select(self, payload: Optional[dict] = None) -> Iterator:
+        """Process the payload and return actions."""
         if self.action is None:
             return ()
 
@@ -30,6 +35,7 @@ class BaseItem(ABC):
         return (action.process(payload) for action in actions)
 
     def serialize(self) -> dict:
+        """Serialize the class instance to a dictionary."""
         res = {}
 
         if self.name is not None:
@@ -45,6 +51,8 @@ class BaseItem(ABC):
 
 
 class Item(BaseItem):
+    """A menu item with content."""
+
     __slots__ = 'content',
 
     def __init__(self, name: str, content: ItemContent, action: Action = None) -> None:
@@ -70,6 +78,8 @@ class Item(BaseItem):
 
 
 class LineBreakItem(BaseItem):
+    """A line break."""
+
     __slots__ = ()
 
     def __repr__(self) -> str:
@@ -82,6 +92,8 @@ class LineBreakItem(BaseItem):
 
 
 class ConditionalItem(Item):
+    """A menu item that is available only on certain condition."""
+
     __slots__ = 'condition',
 
     def __init__(self, name: str, content: ItemContent, action: Action, condition: str) -> None:

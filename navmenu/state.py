@@ -3,26 +3,34 @@ from typing import Optional
 
 
 class StateHandler(ABC):
+    """A generic menu state handler."""
+
     __slots__ = ()
 
     @abstractmethod
     def get(self, user_id: Optional[int]) -> str:
+        """Get the current state for specified user."""
         pass
 
     @abstractmethod
     def set(self, user_id: Optional[int], new_state: str) -> None:
+        """Set the current state for specified user."""
         pass
 
     @abstractmethod
     def create(self, user_id: Optional[int]) -> bool:
+        """If specified user does not exist, create them and return True."""
         pass
 
     @abstractmethod
     def go_back(self, user_id: Optional[int], count: Optional[int] = 1) -> None:
+        """Return to the one of previous states."""
         pass
 
 
 class MemoryStateHandler(StateHandler):
+    """A menu state handler that uses a dictionary to store data."""
+
     __slots__ = 'default_state', 'state', 'history'
 
     def __init__(self, default_state: str) -> None:

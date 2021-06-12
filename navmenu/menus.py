@@ -10,25 +10,33 @@ from .keyboard import KeyboardButton, Keyboard
 
 
 class BaseMenu(ABC):
+    """A generic menu."""
+
     __slots__ = ()
 
     @abstractmethod
     def select(self, action: str, payload=None) -> Optional[Iterator[Message]]:
+        """Select an item based on action and payload and optionally return one or multiple messages."""
         pass
 
     @abstractmethod
     def get_message(self, payload: Optional[dict] = None) -> Message:
+        """Get a message representing the menu."""
         pass
 
     @abstractmethod
     def serialize(self) -> dict:
+        """Serialize the class instance to a dictionary."""
         pass
 
     def enter(self, payload: Optional[dict] = None) -> Optional[Message]:
+        """Enter the menu and optionally return a message."""
         pass
 
 
 class Menu(BaseMenu):
+    """A menu with fixed content and list of items."""
+
     __slots__ = 'content', 'items', 'default_action'
 
     def __init__(
@@ -103,6 +111,8 @@ class Menu(BaseMenu):
 
 
 class CustomMenu(BaseMenu):
+    """A menu that is controlled by a custom class."""
+
     __slots__ = 'handler',
 
     def __init__(self, handler) -> None:
