@@ -36,7 +36,7 @@ menu_manager = MenuManager({
 
 def main():
     io = ConsoleIO(menu_manager)
-    io.process()
+    io.start_loop()
 
 
 if __name__ == '__main__':
