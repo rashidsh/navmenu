@@ -69,7 +69,16 @@ def deserialize_menu(data: dict, function_container: ModuleType, custom_menu_han
 
 
 def deserialize(data: dict, function_container: ModuleType = None, custom_menu_handlers: Sequence = None) -> dict:
-    """Deserialize the dictionary to a menu list."""
+    """Deserialize the dictionary to a menu list.
+
+    Args:
+        data: Data to deserialize.
+        function_container: A module that contains custom functions to be called by actions.
+        custom_menu_handlers: A sequence of custom classes to control menus.
+
+    Returns:
+        A dictionary mapping menu names to menus.
+    """
     return {
         menu_name: deserialize_menu(menu, function_container, custom_menu_handlers)
         for menu_name, menu in data['menus'].items()

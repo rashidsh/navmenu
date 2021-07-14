@@ -2,7 +2,7 @@ from typing import Any, Optional, Sequence
 
 
 class ButtonColors:
-    """Button colors."""
+    """Predefined button colors."""
 
     DEFAULT = 0
     PRIMARY = 1
@@ -11,7 +11,13 @@ class ButtonColors:
 
 
 class KeyboardButton:
-    """An object that represents a keyboard button."""
+    """An object that represents a keyboard button.
+
+    Args:
+        payload: The payload to be sent on button click.
+        text: The button text.
+        color: The button color.
+    """
 
     __slots__ = 'payload', 'text', 'color'
 
@@ -25,7 +31,11 @@ class KeyboardButton:
 
 
 class Keyboard:
-    """An object that represents a keyboard."""
+    """An object that represents a keyboard.
+
+    Args:
+        lines: Initial keyboard lines.
+    """
 
     __slots__ = 'lines',
 
@@ -39,7 +49,11 @@ class Keyboard:
         return f'Keyboard({self.lines})'
 
     def add_button(self, button: KeyboardButton) -> None:
-        """Add button to the last keyboard's line."""
+        """Add a button to the last keyboard's line.
+
+        Args:
+            button: The button to add.
+        """
 
         if len(self.lines) == 0:
             self.add_line()
@@ -47,6 +61,6 @@ class Keyboard:
         self.lines[-1].append(button)
 
     def add_line(self) -> None:
-        """Add empty line to the keyboard."""
+        """Add an empty line to the keyboard."""
 
         self.lines.append([])

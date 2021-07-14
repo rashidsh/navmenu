@@ -3,33 +3,61 @@ from typing import Optional
 
 
 class StateHandler(ABC):
-    """A generic menu state handler."""
+    """A generic menu state manager."""
 
     __slots__ = ()
 
     @abstractmethod
     def get(self, user_id: Optional[int]) -> str:
-        """Get the current state for specified user."""
+        """Get the current state for specified user.
+
+        Args:
+            user_id: A value used to identify the user.
+
+        Returns:
+            The current state for specified user.
+        """
         pass
 
     @abstractmethod
     def set(self, user_id: Optional[int], new_state: str) -> None:
-        """Set the current state for specified user."""
+        """Set the current state for specified user.
+
+        Args:
+            user_id: A value used to identify the user.
+            new_state: A state to set.
+        """
         pass
 
     @abstractmethod
     def create(self, user_id: Optional[int]) -> bool:
-        """If specified user does not exist, create them and return True."""
+        """If specified user does not exist, create them and return True.
+
+        Args:
+            user_id: A value used to identify the user.
+
+        Returns:
+            True if user was successfully created.
+        """
         pass
 
     @abstractmethod
     def go_back(self, user_id: Optional[int], count: Optional[int] = 1) -> None:
-        """Return to the one of previous states."""
+        """Return to the one of previous states.
+
+        Args:
+            user_id: A value used to identify the user.
+            count: How many steps to go back.
+        """
         pass
 
 
 class MemoryStateHandler(StateHandler):
-    """A menu state handler that uses a dictionary to store data."""
+    """A menu state manager that uses a dictionary to store data.
+
+    Args:
+        default_state: The state that will be assigned to new users.
+    """
 
     __slots__ = 'default_state', 'state', 'history'
 

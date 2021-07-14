@@ -10,17 +10,33 @@ class ItemContent(ABC):
 
     @abstractmethod
     def get_content(self, payload: str) -> dict:
-        """Process the payload and return menu content."""
+        """Process the payload and return item content.
+
+        Args:
+            payload: An incoming message payload.
+
+        Returns:
+            Item content.
+        """
         pass
 
     @abstractmethod
     def serialize(self) -> dict:
-        """Serialize the class instance to a dictionary."""
+        """Serialize the class instance to a dictionary.
+
+        Returns:
+            Serialized class instance.
+        """
         pass
 
 
 class TextItemContent(ItemContent):
-    """A text menu item."""
+    """A text menu item.
+
+    Attributes:
+        text: The item text.
+        color: The item color.
+    """
 
     __slots__ = 'text', 'color'
 

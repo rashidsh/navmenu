@@ -16,26 +16,58 @@ class BaseMenu(ABC):
 
     @abstractmethod
     def select(self, action: str, payload=None) -> Optional[Iterator[Message]]:
-        """Select an item based on action and payload and optionally return one or multiple messages."""
+        """Select an item based on action and payload and optionally return one or multiple messages.
+
+        Args:
+            action: A string indicating selected menu button.
+            payload: An incoming message payload.
+
+        Returns:
+            None or a list of messages.
+        """
         pass
 
     @abstractmethod
     def get_message(self, payload: Optional[dict] = None) -> Message:
-        """Get a message representing the menu."""
+        """Get a message representing the menu.
+
+        Args:
+            payload: An incoming message payload.
+
+        Returns:
+            A message representing the menu.
+        """
         pass
 
     @abstractmethod
     def serialize(self) -> dict:
-        """Serialize the class instance to a dictionary."""
+        """Serialize the class instance to a dictionary.
+
+        Returns:
+            A serialized class instance.
+        """
         pass
 
     def enter(self, payload: Optional[dict] = None) -> Optional[Message]:
-        """Enter the menu and optionally return a message."""
+        """Enter the menu and optionally return a message.
+
+        Args:
+            payload: An incoming message payload.
+
+        Returns:
+            None or a message.
+        """
         pass
 
 
 class Menu(BaseMenu):
-    """A menu with fixed content and list of items."""
+    """A menu with fixed content and list of items.
+
+    Args:
+        content: The menu content.
+        items: A sequence of menu items.
+        default_action: The action to select when the provided action does not exist.
+    """
 
     __slots__ = 'content', 'items', 'default_action'
 
@@ -111,7 +143,11 @@ class Menu(BaseMenu):
 
 
 class CustomMenu(BaseMenu):
-    """A menu that is controlled by a custom class."""
+    """A menu that is controlled by a custom class.
+
+    Args:
+        handler: A class containing "select", "get_message" and "enter" methods.
+    """
 
     __slots__ = 'handler',
 

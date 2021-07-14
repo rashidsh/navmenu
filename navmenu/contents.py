@@ -12,12 +12,20 @@ class BaseContent(ABC):
 
     @abstractmethod
     def serialize(self) -> dict:
-        """Serialize the class instance to a dictionary."""
+        """Serialize the class instance to a dictionary.
+
+        Returns:
+            A serialized class instance.
+        """
         pass
 
 
 class Content(BaseContent):
-    """Text menu content."""
+    """Text menu content.
+
+    Args:
+        text: The menu text.
+    """
 
     __slots__ = 'text',
 

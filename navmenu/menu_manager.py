@@ -6,7 +6,12 @@ from .responses import Message, Response
 
 
 class MenuManager:
-    """A class that manages menus and transitions between them."""
+    """A class that manages menus and transitions between them.
+
+    Args:
+        menus: A dictionary mapping menu names to menus.
+        state_handler: The menu state manager to store users' states.
+    """
 
     __slots__ = 'menus', 'state_handler'
 
@@ -18,13 +23,35 @@ class MenuManager:
         return f'MenuManager({self.menus}, {self.state_handler})'
 
     def get_message(self, user_id: int = None, payload: Optional[dict] = None) -> Message:
-        """Get a message representing the current menu."""
+        """Get a message representing the current menu.
+
+        Args:
+            user_id: A value used to identify the user.
+            payload: An incoming message payload.
+
+        Returns:
+            A message representing the current menu.
+        """
         state = self.state_handler.get(user_id)
 
         return self.menus[state].get_message(payload)
 
-    def select(self, action: str, user_id: int = None, payload: Optional[dict] = None) -> Optional[Sequence[Message]]:
-        """Select an item in the current menu based on action and payload."""
+    def select(self, action: str, user_id: int = None, payload: Optional[dict] = None) -> Sequence[Message]:
+        """Select an item in the current menu based on action and payload.
+
+        This method handles current menu changes.
+
+        Args:
+            action: A string indicating selected menu button.
+            user_id: A value used to identify the user.
+            payload: An incoming message payload.
+
+        Returns:
+            A list of messages.
+
+        Raises:
+            ValueError: An invalid action was provided.
+        """
         state = self.state_handler.get(user_id)
 
         actions = self.menus[state].select(action, payload)
@@ -54,7 +81,11 @@ class MenuManager:
             raise ValueError('Invalid action')
 
     def serialize(self) -> dict:
-        """Serialize the class instance to a dictionary."""
+        """Serialize the class instance to a dictionary.
+
+        Returns:
+            A serialized class instance.
+        """
         return {
             'menus': {menu_name: {
                 'type': menu.__class__.__name__,

@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Union
 
 from .actions import Action
 from .item_contents import ItemContent
+from .responses import Message, Response
 
 
 class BaseItem(ABC):
-    """A generic menu item."""
+    """A generic menu item.
+
+    Args:
+        name: The internal item name.
+        action: The action to execute on item select.
+    """
 
     __slots__ = 'name', 'action'
 
@@ -19,15 +25,33 @@ class BaseItem(ABC):
 
     @abstractmethod
     def get_content(self) -> dict:
-        """Get menu item content."""
+        """Get the menu item content.
+
+        Returns:
+            The item content.
+        """
         pass
 
     def is_available(self, payload: Optional[dict] = None) -> bool:
-        """Check whether the menu item is available."""
+        """Check whether the menu item is available.
+
+        Args:
+            payload: An incoming message payload.
+
+        Returns:
+            A boolean indicating whether the menu item is available.
+        """
         return True
 
-    def on_select(self, payload: Optional[dict] = None) -> Iterator:
-        """Process the payload and return actions."""
+    def on_select(self, payload: Optional[dict] = None) -> Iterator[Union[Message, Response]]:
+        """Process the payload and return actions.
+
+        Args:
+            payload: An incoming message payload.
+
+        Returns:
+            A sequence of responses.
+        """
         if self.action is None:
             return ()
 
@@ -35,7 +59,11 @@ class BaseItem(ABC):
         return (action.process(payload) for action in actions)
 
     def serialize(self) -> dict:
-        """Serialize the class instance to a dictionary."""
+        """Serialize the class instance to a dictionary.
+
+        Returns:
+            A serialized class instance.
+        """
         res = {}
 
         if self.name is not None:
@@ -51,7 +79,13 @@ class BaseItem(ABC):
 
 
 class Item(BaseItem):
-    """A menu item with content."""
+    """A menu item with content.
+
+    Args:
+        name: The internal item name.
+        content: The item content.
+        action: The action to execute on item select.
+    """
 
     __slots__ = 'content',
 
@@ -92,7 +126,14 @@ class LineBreakItem(BaseItem):
 
 
 class ConditionalItem(Item):
-    """A menu item that is available only on certain condition."""
+    """A menu item that is available only on certain condition.
+
+    Args:
+        name: The internal item name.
+        content: The item content.
+        action: The action to execute on item select.
+        condition: The condition to check.
+    """
 
     __slots__ = 'condition',
 

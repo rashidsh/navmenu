@@ -4,7 +4,13 @@ from navmenu.keyboard import Keyboard
 
 
 class Message:
-    """An object that represents a message."""
+    """An object that represents a message.
+
+    Args:
+        text: The message text.
+        keyboard: The message keyboard.
+        payload: The message payload.
+    """
 
     __slots__ = 'keyboard', 'text'
 
@@ -23,11 +29,19 @@ class Message:
 
 
 class Response:
-    """An object that represents a message and can be used to change the current menu."""
+    """An object that represents a message and can be used to change the current menu.
+
+    Args:
+        message: The message.
+        menu: The name of the menu to go to.
+        go_back_count: How many steps to go back.
+    """
 
     __slots__ = 'message', 'menu', 'go_back_count'
 
-    def __init__(self, message: Optional[Message] = None, menu: str = None, go_back_count: int = None) -> None:
+    def __init__(
+            self, message: Optional[Message] = None, menu: Optional[str] = None, go_back_count: Optional[int] = None
+    ) -> None:
         self.message = message
         self.menu = menu
         self.go_back_count = go_back_count

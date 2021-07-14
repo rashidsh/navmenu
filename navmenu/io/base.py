@@ -5,7 +5,11 @@ from navmenu.menu_manager import MenuManager
 
 
 class BaseIO(ABC):
-    """A class that processes incoming messages and responds to them."""
+    """A class that processes incoming messages and responds to them.
+
+    Args:
+        menu_manager: The menu manager to process messages.
+    """
 
     __slots__ = 'menu_manager',
 
