@@ -15,6 +15,11 @@ def menu_item():
 
 
 @pytest.fixture
+def menu_item_2():
+    return Item('hello', TextItemContent('say hello'), MessageAction('Hello!'))
+
+
+@pytest.fixture
 def menu(menu_item):
     return Menu(Content('menu content'), (
         menu_item,
@@ -38,6 +43,11 @@ def menu_with_default_action(menu_item):
     return Menu(Content('menu content'), (
         menu_item,
     ), default_action=MessageAction('default message'))
+
+
+@pytest.fixture
+def empty_menu():
+    return Menu(Content('empty menu'))
 
 
 def test_menu_content(menu):
@@ -88,3 +98,15 @@ def test_get_message_with_payload(formatted_menu):
 
     assert message.text == 'menu 123'
     assert message.keyboard.lines[0][0].text == 'button 123'
+
+
+def test_menu_add_item(empty_menu, menu_item_2):
+    empty_menu.add_item(menu_item_2)
+
+    assert len(empty_menu.items) == 1
+    assert empty_menu.items[0] is menu_item_2
+
+
+def test_menu_add_item_with_immutable_item_list(menu, menu_item_2):
+    with pytest.raises(RuntimeError):
+        menu.add_item(menu_item_2)

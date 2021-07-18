@@ -78,7 +78,7 @@ class MenuManager:
             return messages
 
         else:
-            raise ValueError('Invalid action')
+            raise ValueError('An invalid action was provided')
 
     def serialize(self) -> dict:
         """Serialize the class instance to a dictionary.

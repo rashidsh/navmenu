@@ -72,7 +72,10 @@ class Menu(BaseMenu):
     __slots__ = 'content', 'items', 'default_action'
 
     def __init__(
-            self, content: BaseContent, items: Sequence[BaseItem], default_action: Optional[Action] = None
+            self,
+            content: BaseContent,
+            items: Optional[Sequence[BaseItem]] = None,
+            default_action: Optional[Action] = None,
     ) -> None:
         if items is None:
             items = []
@@ -118,6 +121,20 @@ class Menu(BaseMenu):
                     keyboard.add_line()
 
         return Message(payload=payload, keyboard=keyboard, **self.content)
+
+    def add_item(self, item: BaseItem) -> None:
+        """Add the item to the menu.
+
+        Args:
+            item: The item to add.
+
+        Raises:
+            RuntimeError: The menu's item list is immutable.
+        """
+        try:
+            self.items.append(item)
+        except AttributeError:
+            raise RuntimeError('The menu\'s item list is immutable')
 
     def serialize(self) -> dict:
         res = {
