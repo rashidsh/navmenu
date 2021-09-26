@@ -28,7 +28,7 @@ def test_get_message(menu_manager):
     message = menu_manager.get_message()
 
     assert isinstance(message, Message)
-    assert message.text == 'menu content'
+    assert message.get_text() == 'menu content'
 
 
 def test_select(menu_manager):
@@ -36,7 +36,7 @@ def test_select(menu_manager):
 
     assert len(messages) == 1
     assert isinstance(messages[0], Message)
-    assert messages[0].text == 'message text'
+    assert messages[0].get_text() == 'message text'
 
 
 def test_select_invalid_action(menu_manager):

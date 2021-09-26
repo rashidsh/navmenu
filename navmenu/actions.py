@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from .responses import Message, Response
 
@@ -142,20 +142,46 @@ class FunctionAction(Action):
 
     Args:
         function: The function to run.
+        templates: The response templates.
     """
 
-    __slots__ = 'function',
+    __slots__ = 'function', 'templates'
 
-    def __init__(self, function) -> None:
+    def __init__(self, function, templates: Optional[Dict[Any, Union[Message, Response]]] = None) -> None:
+        if templates is None:
+            templates = {}
+
         self.function = function
+        self.templates = templates
 
     def __repr__(self) -> str:
-        return f'FunctionAction({self.function})'
+        return f'FunctionAction({self.function}, {self.templates})'
 
     def process(self, payload: Optional[dict] = None) -> Union[Message, Response]:
-        return self.function(payload)
+        if payload is None:
+            payload = {}
+
+        func_res = self.function(payload)
+
+        if func_res in self.templates:
+            res = self.templates[func_res]
+            res.update_payload(payload)
+            return res
+
+        else:
+            func_res.update_payload(payload)
+            return func_res
 
     def serialize(self) -> dict:
-        return {
+        res = {
             'function': self.function.__name__,
         }
+
+        if self.templates is not None:
+            res['templates'] = [{
+                'case': k,
+                'type': v.__class__.__name__,
+                **v.serialize(),
+            } for k, v in self.templates.items()]
+
+        return res

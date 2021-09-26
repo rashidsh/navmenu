@@ -51,7 +51,7 @@ class VKMessage:
 
 
 def format_message(message: Message) -> VKMessage:
-    return VKMessage(message.text, message.keyboard)
+    return VKMessage(message.get_text(), message.keyboard)
 
 
 class VKIO(BaseIO):

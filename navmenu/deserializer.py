@@ -6,22 +6,35 @@ from . import contents
 from . import item_contents
 from . import items
 from . import menus
+from . import responses
 
 
 def filter_kwargs(data: dict, extra_excludes: Optional[Sequence] = None) -> dict:
     if extra_excludes is None:
         extra_excludes = ()
 
-    return {k: v for k, v in data.items() if k not in ['type', *extra_excludes]}
+    return {k: v for k, v in data.items() if k not in ('type', *extra_excludes)}
 
 
 def deserialize_action(data: dict, function_container: ModuleType):
     class_ = getattr(actions, data['type'])
 
     if 'function' in data:
+        templates = {}
+        for template in data['templates']:
+            if 'message' in template:
+                template['message'] = getattr(responses, template['message']['type'])(
+                    **filter_kwargs(template['message'])
+                )
+
+            templates[template['case']] = getattr(responses, template['type'])(
+                **filter_kwargs(template, ('case', ))
+            )
+
         return class_(
-            **filter_kwargs(data, ('function', )),
+            **filter_kwargs(data, ('function', 'templates')),
             function=getattr(function_container, data['function']),
+            templates=templates,
         )
 
     else:

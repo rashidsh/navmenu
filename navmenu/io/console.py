@@ -19,9 +19,9 @@ def format_message(message: Message) -> str:
             actions += ' | '.join(f"{i.payload}: {i.text}" for i in line) + '\n'
 
     if actions:
-        return f'{SEPARATOR}\n{message.text}\n{SEPARATOR}\n{actions}{SEPARATOR}'
+        return f'{SEPARATOR}\n{message.get_text()}\n{SEPARATOR}\n{actions}{SEPARATOR}'
     else:
-        return f'\n{message.text}'
+        return f'\n{message.get_text()}'
 
 
 class ConsoleIO(BaseIO):

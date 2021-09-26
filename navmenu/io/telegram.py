@@ -37,7 +37,7 @@ class TelegramMessage:
 
 
 def format_message(message: Message) -> TelegramMessage:
-    return TelegramMessage(message.text, message.keyboard)
+    return TelegramMessage(message.get_text(), message.keyboard)
 
 
 class TelegramIO(BaseIO):

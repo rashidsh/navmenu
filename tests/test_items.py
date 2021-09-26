@@ -34,7 +34,7 @@ def test_item_on_select_with_action(item_with_action):
     message = next(res, None)
 
     assert isinstance(message, Message)
-    assert message.text == 'message'
+    assert message.get_text() == 'message'
 
 
 def test_item_get_content(item):

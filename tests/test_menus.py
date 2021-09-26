@@ -66,7 +66,7 @@ def test_menu_select(menu):
     message = next(actions, None)
 
     assert isinstance(message, Message)
-    assert message.text == 'message text'
+    assert message.get_text() == 'message text'
 
 
 def test_menu_select_invalid_item(menu):
@@ -80,13 +80,13 @@ def test_menu_select_default_item(menu_with_default_action):
     message = actions[0]
 
     assert isinstance(message, Message)
-    assert message.text == 'default message'
+    assert message.get_text() == 'default message'
 
 
 def test_get_message(menu):
     message = menu.get_message()
 
-    assert message.text == 'menu content'
+    assert message.get_text() == 'menu content'
     assert len(message.keyboard.lines) == 1
     assert len(message.keyboard.lines[0]) == 1
     assert message.keyboard.lines[0][0].payload == 'item'
@@ -96,7 +96,7 @@ def test_get_message(menu):
 def test_get_message_with_payload(formatted_menu):
     message = formatted_menu.get_message({'user_id': 123})
 
-    assert message.text == 'menu 123'
+    assert message.get_text() == 'menu 123'
     assert message.keyboard.lines[0][0].text == 'button 123'
 
 
