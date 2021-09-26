@@ -22,6 +22,15 @@ class MenuManager:
     def __repr__(self) -> str:
         return f'MenuManager({self.menus}, {self.state_handler})'
 
+    def _switch_menu(self, user_id: int, menu_name: str, payload: dict) -> Sequence[Message]:
+        self.state_handler.set(user_id, menu_name)
+
+        enter_res = self.menus[menu_name].enter(payload)
+        if isinstance(enter_res, Message):
+            return enter_res,
+        else:
+            return ()
+
     def get_message(self, user_id: int = None, payload: Optional[dict] = None) -> Message:
         """Get a message representing the current menu.
 
@@ -69,15 +78,15 @@ class MenuManager:
                         self.state_handler.go_back(user_id, res.go_back_count)
 
                     if res.menu:
-                        self.state_handler.set(user_id, res.menu)
-
-                        enter_res = self.menus[res.menu].enter(payload)
-                        if isinstance(enter_res, Message):
-                            messages.append(enter_res)
+                        messages += self._switch_menu(user_id, res.menu, payload)
 
             return messages
 
         else:
+            for menu_name, menu in self.menus.items():
+                if action.lower() in menu.aliases:
+                    return self._switch_menu(user_id, menu_name, payload)
+
             raise ValueError('An invalid action was provided')
 
     def serialize(self) -> dict:

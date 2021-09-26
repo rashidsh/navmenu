@@ -18,9 +18,17 @@ def menu():
 
 
 @pytest.fixture
-def menu_manager(menu):
+def menu_with_alias():
+    return Menu(Content('menu with alias content'), (
+        Item('item', TextItemContent('button title'), MessageAction('message text')),
+    ), aliases=('alias', ))
+
+
+@pytest.fixture
+def menu_manager(menu, menu_with_alias):
     return MenuManager({
         'menu': menu,
+        'menu_with_alias': menu_with_alias,
     }, MemoryStateHandler('menu'))
 
 
@@ -42,3 +50,11 @@ def test_select(menu_manager):
 def test_select_invalid_action(menu_manager):
     with pytest.raises(ValueError):
         menu_manager.select('invalid item')
+
+
+def test_menu_with_alias(menu_manager):
+    menu_manager.select('alias')
+    message = menu_manager.get_message()
+
+    assert isinstance(message, Message)
+    assert message.get_text() == 'menu with alias content'

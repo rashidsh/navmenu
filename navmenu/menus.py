@@ -10,9 +10,19 @@ from .keyboard import KeyboardButton, Keyboard
 
 
 class BaseMenu(ABC):
-    """A generic menu."""
+    """A generic menu.
 
-    __slots__ = ()
+    Args:
+        aliases: A sequence of strings that act as shortcuts to the menu.
+    """
+
+    __slots__ = 'aliases',
+
+    def __init__(self, aliases: Optional[Sequence[str]] = None):
+        if aliases is None:
+            aliases = []
+
+        self.aliases = aliases
 
     @abstractmethod
     def select(self, action: str, payload=None) -> Optional[Iterator[Message]]:
@@ -46,7 +56,12 @@ class BaseMenu(ABC):
         Returns:
             A serialized class instance.
         """
-        pass
+        res = {}
+
+        if self.aliases:
+            res['aliases'] = self.aliases
+
+        return res
 
     def enter(self, payload: Optional[dict] = None) -> Optional[Message]:
         """Enter the menu and optionally return a message.
@@ -67,6 +82,7 @@ class Menu(BaseMenu):
         content: The menu content.
         items: A sequence of menu items.
         default_action: The action to select when the provided action does not exist.
+        aliases: A sequence of strings that act as shortcuts to the menu.
     """
 
     __slots__ = 'content', 'items', 'default_action'
@@ -76,7 +92,10 @@ class Menu(BaseMenu):
             content: BaseContent,
             items: Optional[Sequence[BaseItem]] = None,
             default_action: Optional[Action] = None,
+            aliases: Optional[Sequence[str]] = None,
     ) -> None:
+        super().__init__(aliases)
+
         if items is None:
             items = []
 
@@ -138,6 +157,7 @@ class Menu(BaseMenu):
 
     def serialize(self) -> dict:
         res = {
+            **super().serialize(),
             'content': {
                 'type': self.content.__class__.__name__,
                 **self.content.serialize(),
@@ -164,12 +184,13 @@ class CustomMenu(BaseMenu):
 
     Args:
         handler: A class containing "select", "get_message" and "enter" methods.
+        aliases: A sequence of strings that act as shortcuts to the menu.
     """
 
     __slots__ = 'handler',
 
-    def __init__(self, handler) -> None:
-        super().__init__()
+    def __init__(self, handler, aliases: Optional[Sequence[str]] = None) -> None:
+        super().__init__(aliases)
 
         self.handler = handler
 
@@ -186,7 +207,8 @@ class CustomMenu(BaseMenu):
 
     def serialize(self) -> dict:
         res = {
-            'handler': self.handler.__name__
+            **super().serialize(),
+            'handler': self.handler.__name__,
         }
 
         return res
