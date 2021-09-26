@@ -177,7 +177,7 @@ class FunctionAction(Action):
             'function': self.function.__name__,
         }
 
-        if self.templates is not None:
+        if self.templates:
             res['templates'] = [{
                 'case': k,
                 'type': v.__class__.__name__,

@@ -21,15 +21,16 @@ def deserialize_action(data: dict, function_container: ModuleType):
 
     if 'function' in data:
         templates = {}
-        for template in data['templates']:
-            if 'message' in template:
-                template['message'] = getattr(responses, template['message']['type'])(
-                    **filter_kwargs(template['message'])
-                )
+        if 'templates' in data:
+            for template in data['templates']:
+                if 'message' in template:
+                    template['message'] = getattr(responses, template['message']['type'])(
+                        **filter_kwargs(template['message'])
+                    )
 
-            templates[template['case']] = getattr(responses, template['type'])(
-                **filter_kwargs(template, ('case', ))
-            )
+                templates[template['case']] = getattr(responses, template['type'])(
+                    **filter_kwargs(template, ('case', ))
+                )
 
         return class_(
             **filter_kwargs(data, ('function', 'templates')),
