@@ -104,7 +104,7 @@ class Menu(BaseMenu):
         self.default_action = default_action
 
     def __repr__(self) -> str:
-        return f'Menu({self.content}, {self.items}, {repr(self.default_action)})'
+        return f'Menu({self.content}, {self.items}, {repr(self.default_action)}, {self.aliases})'
 
     def select(self, action: str, payload: Optional[dict] = None) -> Optional[Iterator[Message]]:
         target_item = next((
@@ -129,12 +129,11 @@ class Menu(BaseMenu):
                 kwargs = item.get_content()
 
                 if kwargs['type'] == 'button':
-                    del kwargs['type']
-
-                    if 'text' in kwargs:
-                        kwargs['text'] = kwargs['text'].format(**payload)
-
-                    keyboard.add_button(KeyboardButton(**kwargs))
+                    keyboard.add_button(KeyboardButton(
+                        kwargs['payload'],
+                        kwargs['text'].format(**payload),
+                        kwargs['color'],
+                    ))
 
                 elif kwargs['type'] == 'line_break':
                     keyboard.add_line()

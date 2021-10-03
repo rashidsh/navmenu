@@ -135,18 +135,19 @@ class ConditionalItem(Item):
         condition: The condition to check.
     """
 
-    __slots__ = 'condition',
+    __slots__ = '_condition_func', 'condition'
 
     def __init__(self, name: str, content: ItemContent, action: Action, condition: str) -> None:
         super().__init__(name, content, action)
 
         self.condition = condition
+        self._condition_func = eval(condition)
 
     def __repr__(self) -> str:
         return f'ConditionalItem({repr(self.name)}, {self.content}, {self.action}, {repr(self.condition)})'
 
     def is_available(self, payload: Optional[dict] = None) -> bool:
-        return eval(self.condition)(payload)
+        return self._condition_func(payload)
 
     def serialize(self) -> dict:
         res = super().serialize()
