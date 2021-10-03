@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import Optional, Tuple
 
 
 class BaseContent(ABC):
@@ -9,6 +9,10 @@ class BaseContent(ABC):
 
     def __getitem__(self, key):
         return getattr(self, key)
+
+    @staticmethod
+    def keys() -> tuple:
+        return ()
 
     @abstractmethod
     def serialize(self) -> dict:
@@ -29,7 +33,7 @@ class Content(BaseContent):
 
     __slots__ = 'text',
 
-    def __init__(self, text: str = None) -> None:
+    def __init__(self, text: Optional[str] = None) -> None:
         self.text = text
 
     def __repr__(self) -> str:

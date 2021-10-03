@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Union
 
+from .contents import Content
 from .responses import Message, Response
 
 
@@ -47,7 +48,7 @@ class MessageAction(Action):
         return f'MessageAction({repr(self.text)})'
 
     def process(self, payload: Optional[dict] = None) -> Message:
-        return Message(self.text, payload=payload)
+        return Message(Content(text=self.text), payload=payload)
 
     def serialize(self) -> dict:
         return {
@@ -123,8 +124,11 @@ class ExecuteAction(Action):
     def __repr__(self) -> str:
         return f'ExecuteAction({repr(self.command)}, {self.return_text})'
 
-    def process(self, payload: Optional[dict] = None) -> Message:
-        return Message(str(eval(self.command)) if self.return_text else exec(self.command), payload=payload)
+    def process(self, payload: Optional[dict] = None) -> Optional[Message]:
+        if self.return_text:
+            return Message(Content(text=str(eval(self.command))), payload=payload)
+        else:
+            exec(self.command)
 
     def serialize(self) -> dict:
         res = {

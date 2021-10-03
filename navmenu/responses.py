@@ -1,5 +1,6 @@
 from typing import Optional
 
+from .contents import BaseContent
 from .keyboard import Keyboard
 
 
@@ -7,33 +8,41 @@ class Message:
     """An object that represents a message.
 
     Args:
-        text: The message text.
+        content: The message content.
         keyboard: The message keyboard.
         payload: The message payload.
     """
 
-    __slots__ = 'keyboard', 'text', 'payload'
+    __slots__ = 'keyboard', 'content', 'payload'
 
     def __init__(
-            self, text: Optional[str] = None, keyboard: Optional[Keyboard] = None, payload: Optional[dict] = None
+            self,
+            content: Optional[BaseContent] = None,
+            keyboard: Optional[Keyboard] = None,
+            payload: Optional[dict] = None,
     ) -> None:
         if payload is None:
             payload = {}
 
+        self.content = content
         self.keyboard = keyboard
-        self.text = text
         self.payload = payload
 
     def __repr__(self) -> str:
-        return f'Message({repr(self.text)}, {self.keyboard}, {self.payload})'
+        return f'Message({self.content}, {self.keyboard}, {self.payload})'
 
-    def get_text(self) -> Optional[str]:
-        """Format and return message text.
+    def get_content(self) -> dict:
+        """Format and return message content.
 
         Returns:
-            Formatted message text.
+            Formatted message content.
         """
-        return self.text.format(**self.payload) if self.text is not None else None
+        if self.content is None:
+            return {}
+
+        return {k: (
+            self.content[k].format(**self.payload) if isinstance(self.content[k], str) else self.content[k]
+        ) for k in self.content.keys()}
 
     def update_payload(self, payload: dict) -> None:
         """Update the message payload.
@@ -51,8 +60,11 @@ class Message:
         """
         res = {}
 
-        if self.text is not None:
-            res['text'] = self.text
+        if self.content is not None:
+            res['content'] = {
+                'type': self.content.__class__.__name__,
+                **self.content.serialize(),
+            }
 
         if self.payload:
             res['payload'] = self.payload

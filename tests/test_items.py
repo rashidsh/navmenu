@@ -18,7 +18,7 @@ def item_with_action():
 
 @pytest.fixture
 def conditional_item():
-    return ConditionalItem('item', TextItemContent('text'), MessageAction('message'), 'lambda x: x == 123')
+    return ConditionalItem('item', TextItemContent('text'), MessageAction('message'), 'lambda x: x["user_id"] == 123')
 
 
 def test_is_menu_item_available(item):
@@ -34,7 +34,7 @@ def test_item_on_select_with_action(item_with_action):
     message = next(res, None)
 
     assert isinstance(message, Message)
-    assert message.get_text() == 'message'
+    assert message.get_content().get('text') == 'message'
 
 
 def test_item_get_content(item):
@@ -55,5 +55,5 @@ def test_line_break_item_get_content():
 
 
 def test_conditional_item(conditional_item):
-    assert conditional_item.is_available(123)
-    assert not conditional_item.is_available()
+    assert conditional_item.is_available({'user_id': 123})
+    assert not conditional_item.is_available({'user_id': 456})

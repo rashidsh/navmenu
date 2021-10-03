@@ -8,6 +8,14 @@ from navmenu.responses import Message
 
 
 class TelegramMessage:
+    def __init__(self, text: Optional[str] = '', keyboard: Optional[Keyboard] = None) -> None:
+        self.text = text
+
+        self.rows = []
+        self.keyboard = None
+        if keyboard is not None:
+            self.keyboard = self.format_keyboard(keyboard)
+
     def add_keyboard_button(self, payload: dict, text: str) -> None:
         self.rows[-1].append({
             'text': text,
@@ -27,17 +35,11 @@ class TelegramMessage:
             'inline_keyboard': self.rows,
         }, ensure_ascii=False, separators=(',', ':'))
 
-    def __init__(self, text: str, keyboard: Keyboard = None) -> None:
-        self.text = text
-
-        self.rows = []
-        self.keyboard = None
-        if keyboard is not None:
-            self.keyboard = self.format_keyboard(keyboard)
-
 
 def format_message(message: Message) -> TelegramMessage:
-    return TelegramMessage(message.get_text(), message.keyboard)
+    content = message.get_content()
+
+    return TelegramMessage(content.get('text', ''), message.keyboard)
 
 
 class TelegramIO(BaseIO):

@@ -1,5 +1,6 @@
 from typing import Callable, Sequence
 
+from navmenu.contents import Content
 from navmenu.io.base import BaseIO
 from navmenu.menu_manager import MenuManager
 from navmenu.responses import Message
@@ -12,6 +13,7 @@ def send_default(message):
 
 
 def format_message(message: Message) -> str:
+    content = message.get_content()
     actions = ''
 
     if message.keyboard is not None:
@@ -19,9 +21,11 @@ def format_message(message: Message) -> str:
             actions += ' | '.join(f"{i.payload}: {i.text}" for i in line) + '\n'
 
     if actions:
-        return f'{SEPARATOR}\n{message.get_text()}\n{SEPARATOR}\n{actions}{SEPARATOR}'
+        return f'{SEPARATOR}\n{content.get("text", "(no text)")}\n{SEPARATOR}\n{actions}{SEPARATOR}'
+    elif 'text' in content:
+        return f'\n{content["text"]}'
     else:
-        return f'\n{message.get_text()}'
+        return ''
 
 
 class ConsoleIO(BaseIO):
@@ -37,7 +41,7 @@ class ConsoleIO(BaseIO):
             messages = self.menu_manager.select(text)
 
         except ValueError:
-            res.append(format_message(Message('Invalid command')))
+            res.append(format_message(Message(Content('Invalid command'))))
 
         else:
             res += [format_message(i) for i in messages]

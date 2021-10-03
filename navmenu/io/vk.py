@@ -16,6 +16,14 @@ VK_BUTTON_COLORS = {
 
 
 class VKMessage:
+    def __init__(self, text: Optional[str] = '', keyboard: Optional[Keyboard] = None) -> None:
+        self.text = text
+
+        self.rows = []
+        self.keyboard = None
+        if keyboard is not None:
+            self.keyboard = self.format_keyboard(keyboard)
+
     def add_keyboard_button(self, payload: dict, text: str, color: int) -> None:
         self.rows[-1].append({
             'color': VK_BUTTON_COLORS[color],
@@ -41,24 +49,18 @@ class VKMessage:
             'buttons': self.rows,
         }, ensure_ascii=False, separators=(',', ':'))
 
-    def __init__(self, text: str, keyboard: Keyboard = None) -> None:
-        self.text = text
-
-        self.rows = []
-        self.keyboard = None
-        if keyboard is not None:
-            self.keyboard = self.format_keyboard(keyboard)
-
 
 def format_message(message: Message) -> VKMessage:
-    return VKMessage(message.get_text(), message.keyboard)
+    content = message.get_content()
+
+    return VKMessage(content.get('text', ''), message.keyboard)
 
 
 class VKIO(BaseIO):
     def __init__(self, menu_manager: MenuManager) -> None:
         super().__init__(menu_manager)
 
-    def process(self, user_id: int, text: Optional[str], payload: dict) -> Sequence[VKMessage]:
+    def process(self, user_id: int, text: str, payload: dict) -> Sequence[VKMessage]:
         res = []
 
         action = payload['a'] if 'a' in payload else text

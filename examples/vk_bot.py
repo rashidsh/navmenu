@@ -4,6 +4,7 @@ from vk_api.bot_longpoll import VkBotEventType, VkBotLongPoll
 from vk_api.utils import get_random_id
 
 from navmenu import MenuManager
+from navmenu.contents import Content
 from navmenu.deserializer import deserialize
 from navmenu.io import VKIO
 from navmenu.responses import Message, Response
@@ -15,7 +16,7 @@ GROUP_ID = 123
 
 
 def go_back_func(msg):
-    return Response(Message('Going back...'), go_back_count=1)
+    return Response(Message(Content('Going back...')), go_back_count=1)
 
 
 def send(peer_id, text, keyboard):

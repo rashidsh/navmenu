@@ -138,7 +138,7 @@ class Menu(BaseMenu):
                 elif kwargs['type'] == 'line_break':
                     keyboard.add_line()
 
-        return Message(payload=payload, keyboard=keyboard, **self.content)
+        return Message(self.content, keyboard, payload)
 
     def add_item(self, item: BaseItem) -> None:
         """Add the item to the menu.

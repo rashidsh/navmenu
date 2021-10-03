@@ -2,6 +2,7 @@ import json
 import telebot
 
 from navmenu import MenuManager
+from navmenu.contents import Content
 from navmenu.deserializer import deserialize
 from navmenu.io import TelegramIO
 from navmenu.responses import Message, Response
@@ -11,7 +12,7 @@ TOKEN = 'abc123'
 
 
 def go_back_func(msg):
-    return Response(Message('Going back...'), go_back_count=1)
+    return Response(Message(Content('Going back...')), go_back_count=1)
 
 
 def reply(message, text, keyboard):

@@ -1,13 +1,14 @@
 import pytest
 
 from navmenu.actions import MessageAction, SubmenuAction, GoBackAction, ExecuteAction, FunctionAction
+from navmenu.contents import Content
 from navmenu.responses import Message, Response
 
 
 @pytest.fixture
 def function_action():
     def func(payload):
-        return Message('user {user_id}')
+        return Message(Content(text='user {user_id}'))
 
     return func
 
@@ -17,7 +18,7 @@ def test_message_action():
     res = action.process(None)
 
     assert isinstance(res, Message)
-    assert res.get_text() == 'message'
+    assert res.get_content().get('text') == 'message'
 
 
 def test_submenu_action():
@@ -48,7 +49,7 @@ def test_execute_action_with_result():
     res = action.process(None)
 
     assert isinstance(res, Message)
-    assert res.get_text() == '4'
+    assert res.get_content().get('text') == '4'
 
 
 def test_function_action(function_action):
@@ -56,14 +57,14 @@ def test_function_action(function_action):
     res = action.process({'user_id': 123})
 
     assert isinstance(res, Message)
-    assert res.get_text() == 'user 123'
+    assert res.get_content().get('text') == 'user 123'
 
 
 def test_function_action_with_templates():
     action = FunctionAction(lambda x: 'success', templates={
-        'success': Message('ok'),
+        'success': Message(Content(text='ok')),
     })
     res = action.process(None)
 
     assert isinstance(res, Message)
-    assert res.get_text() == 'ok'
+    assert res.get_content().get('text') == 'ok'

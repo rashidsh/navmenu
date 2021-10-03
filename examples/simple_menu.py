@@ -10,7 +10,7 @@ from navmenu.responses import Message, Response
 
 
 def go_back_func(msg):
-    return Response(Message('Going back...'), go_back_count=1)
+    return Response(Message(Content('Going back...')), go_back_count=1)
 
 
 main_menu = Menu(Content('Main menu'), (
